@@ -30,12 +30,12 @@ func TestRotate(t *testing.T) {
 	original := []int{1, 2, 3, 4, 5}
 	data := []rotation{
 		{-1, []int{2, 3, 4, 5, 1}},
-		{0,  []int{1, 2, 3, 4, 5}},
-		{1,  []int{5, 1, 2, 3, 4}},
-		{2,  []int{4, 5, 1, 2, 3}},
-		{3,  []int{3, 4, 5, 1, 2}},
-		{4,  []int{2, 3, 4, 5, 1}},
-		{5,  []int{1, 2, 3, 4, 5}},
+		{0, []int{1, 2, 3, 4, 5}},
+		{1, []int{5, 1, 2, 3, 4}},
+		{2, []int{4, 5, 1, 2, 3}},
+		{3, []int{3, 4, 5, 1, 2}},
+		{4, []int{2, 3, 4, 5, 1}},
+		{5, []int{1, 2, 3, 4, 5}},
 	}
 	for i, r := range data {
 		a := make([]int, len(original))
@@ -43,7 +43,7 @@ func TestRotate(t *testing.T) {
 		Rotate(a, r.rotation)
 		if compare(a, r.expected) != 0 {
 			t.Errorf("%d: Rotating by %d was %v, should be %v",
-				 i, r.rotation, a, r.expected)
+				i, r.rotation, a, r.expected)
 		}
 	}
 }
@@ -74,8 +74,8 @@ func findLinear(n int, a []int) bool {
 
 func assertSame(t *testing.T, i, n int, a []int) {
 	if Find(n, a) != findLinear(n, a) {
-		t.Errorf("%d: Find and findLinear did not agree whether " +
-			 "%d is in %v", i, n, a)
+		t.Errorf("%d: Find and findLinear did not agree whether "+
+			"%d is in %v", i, n, a)
 	}
 }
 
@@ -94,8 +94,8 @@ func TestFound(t *testing.T) {
 	data := createRotatedValues(original)
 	for i, toFind := range original {
 		for j, d := range data {
-			assertFound(t, len(original)*i + j, toFind, d)
-			assertSame(t, len(original)*i + j, toFind, d)
+			assertFound(t, len(original)*i+j, toFind, d)
+			assertSame(t, len(original)*i+j, toFind, d)
 		}
 	}
 }
@@ -106,8 +106,8 @@ func TestNotFound(t *testing.T) {
 	data := createRotatedValues(original)
 	for i, toFind := range notFound {
 		for j, d := range data {
-			assertNotFound(t, len(notFound)*i + j, toFind, d)
-			assertSame(t, len(notFound)*i + j, toFind, d)
+			assertNotFound(t, len(notFound)*i+j, toFind, d)
+			assertSame(t, len(notFound)*i+j, toFind, d)
 		}
 	}
 }

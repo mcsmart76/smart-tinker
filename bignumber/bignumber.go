@@ -15,86 +15,86 @@ import (
 // but did my best to give each character a pleasant shape.  This is
 // not a fixed-width font.
 var bigNumbers = [][]string{
-        {
-                "  000  ",
-                " 0   0 ",
-                "0     0",
-                "0     0",
-                "0     0",
-                " 0   0 ",
-                "  000  "},
-        {
-                "  1 ",
-                " 11 ",
-                "  1 ",
-                "  1 ",
-                "  1 ",
-                "  1 ",
-                " 111"},
-        {
-                " 222 ",
-                "2   2",
-                "   2 ",
-                "  2  ",
-                " 2   ",
-                "2    ",
-                "22222"},
-        {
-                " 3333 ",
-                "3    3",
-                "     3",
-                "  333 ",
-                "     3",
-                "3    3",
-                " 3333 "},
-        {
-                "   44 ",
-                "  4 4 ",
-                " 4  4 ",
-                "444444",
-                "    4 ",
-                "    4 ",
-                "    4 "},
-        {
-                "555555",
-                "5     ",
-                "5     ",
-                " 5555 ",
-                "     5",
-                "5    5",
-                " 5555 "},
-        {
-                " 6666 ",
-                "6    6",
-                "6     ",
-                "66666 ",
-                "6    6",
-                "6    6",
-                " 6666 "},
 	{
-                "777777",
-                "     7",
-                "    7 ",
-                "   7  ",
-                "  7   ",
-                " 7    ",
-                "7     "},
-        {
-                " 8888 ",
-                "8    8",
-                "8    8",
-                " 8888 ",
-                "8    8",
-                "8    8",
-                " 8888 "},
-        {
-                " 9999 ",
-                "9    9",
-                "9    9",
-                " 99999",
-                "     9",
-                "     9",
-                "     9"},
+		"  000  ",
+		" 0   0 ",
+		"0     0",
+		"0     0",
+		"0     0",
+		" 0   0 ",
+		"  000  "},
+	{
+		"  1 ",
+		" 11 ",
+		"  1 ",
+		"  1 ",
+		"  1 ",
+		"  1 ",
+		" 111"},
+	{
+		" 222 ",
+		"2   2",
+		"   2 ",
+		"  2  ",
+		" 2   ",
+		"2    ",
+		"22222"},
+	{
+		" 3333 ",
+		"3    3",
+		"     3",
+		"  333 ",
+		"     3",
+		"3    3",
+		" 3333 "},
+	{
+		"   44 ",
+		"  4 4 ",
+		" 4  4 ",
+		"444444",
+		"    4 ",
+		"    4 ",
+		"    4 "},
+	{
+		"555555",
+		"5     ",
+		"5     ",
+		" 5555 ",
+		"     5",
+		"5    5",
+		" 5555 "},
+	{
+		" 6666 ",
+		"6    6",
+		"6     ",
+		"66666 ",
+		"6    6",
+		"6    6",
+		" 6666 "},
+	{
+		"777777",
+		"     7",
+		"    7 ",
+		"   7  ",
+		"  7   ",
+		" 7    ",
+		"7     "},
+	{
+		" 8888 ",
+		"8    8",
+		"8    8",
+		" 8888 ",
+		"8    8",
+		"8    8",
+		" 8888 "},
+	{
+		" 9999 ",
+		"9    9",
+		"9    9",
+		" 99999",
+		"     9",
+		"     9",
+		"     9"},
 }
 
 func main() {
@@ -109,16 +109,16 @@ func main() {
 	height := len(bigNumbers[0])
 	for d, digit := range bigNumbers {
 		if len(digit) != height {
-			log.Printf("The character set is invalid; " +
-				   "%v is a different height", d)
+			log.Printf("The character set is invalid; "+
+				"%v is a different height", d)
 			verified = false
 		}
 
 		width := len(digit[0])
 		for _, row := range digit {
 			if len(row) != width {
-				log.Printf("The character set is invalid; " +
-					   "%v has rows of different widths", d)
+				log.Printf("The character set is invalid; "+
+					"%v has rows of different widths", d)
 				verified = false
 				break
 			}
@@ -143,4 +143,3 @@ func main() {
 		fmt.Println(line)
 	}
 }
-
