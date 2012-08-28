@@ -8,13 +8,6 @@
 
 package circularly_sorted
 
-// IsCircularlySorted returns true if the slice a is circularly-sorted
-// and false otherwise.
-func IsCircularlySorted(a []int) bool {
-	// TODO: Implement.
-	return false
-}
-
 // Find returns true if n is in the circularly-sorted slice a
 // and false otherwise.  This is a recursive implementation.
 // It take O(log n) time.
@@ -49,14 +42,18 @@ func Find(n int, a []int) bool {
 // by rotation.  Positive numbers rotate right; negative numbers
 // rotate left.
 func Rotate(a []int, rotation int) {
+	if len(a) == 0 {
+		// Not just an optimization; avoids division by 0.
+		return
+	}
+	rotation = rotation % len(a)
+	if rotation < 0 {
+		rotation += len(a)
+	}
 	if rotation == 0 {
 		// Not just an optimization; avoids out of bounds access.
 		return
 	}
-	if len(a) == 0 {
-		// Not just an optimization; avoids division by 0.
-	}
-	rotation = rotation % len(a)
 	yStart := len(a) - rotation
 	x, y := 0, yStart
 	for x != y {
