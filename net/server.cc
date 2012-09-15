@@ -7,6 +7,7 @@
 // and tested with:
 //
 //   nc localhost 8080
+//   nc ::1 8080
 //
 // Build with:
 //
@@ -59,21 +60,23 @@ int main(int argc, char* argv[]) {
   argc -= optind;
   argv += optind;
 
-  int s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+  int s = socket(PF_INET6, SOCK_STREAM, IPPROTO_TCP);
   if (s == -1) {
     perror("socket create failed");
     return EXIT_FAILURE;
   }
 
-  // Setup the socket address and bind.
-  struct sockaddr_in address;
-  memset(&address, 0, sizeof(address));
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons(port);
+  // Setup the socket address and bind.  AF_INET6 and in6addr_any (::1)
+  // means this will bind to both IPv4 and IPv6.  Mapped IPv4 addresses
+  // and more are described in RFC 2553.
+  struct sockaddr_in6 socket_address;
+  memset(&socket_address, 0, sizeof(socket_address));
+  socket_address.sin6_family = AF_INET6;
+  socket_address.sin6_addr = in6addr_any;
+  socket_address.sin6_port = htons(port);
 
-  if (bind(s, reinterpret_cast<struct sockaddr*>(&address),
-           sizeof(address)) == -1) {
+  if (bind(s, reinterpret_cast<struct sockaddr*>(&socket_address),
+           sizeof(socket_address)) == -1) {
     perror("bind failed");
     return EXIT_FAILURE;
   }
@@ -86,10 +89,10 @@ int main(int argc, char* argv[]) {
 
   while (true) {
     // Loop until we get "quit".
-    struct sockaddr_in peer_address;
+    struct sockaddr_in6 peer_address;
     socklen_t peer_length;
-    int peer_sock = accept(s, reinterpret_cast<struct sockaddr*>(&peer_address),
-                         &peer_length);
+    int peer_sock = accept(
+        s, reinterpret_cast<struct sockaddr*>(&peer_address), &peer_length);
     if (peer_sock == -1) {
       perror("accept failed");
       return EXIT_FAILURE;
