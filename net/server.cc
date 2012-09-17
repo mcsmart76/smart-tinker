@@ -31,14 +31,17 @@ using std::string;
 
 void Usage() {
   fprintf(stderr,
-          "Usage: server [-p port]\n"
+          "Usage: server [-p port] [-s seconds]\n"
+          " -p\tPort to listen on.\n"
+          " -s\tSleep this many seconds to simulate work.\n"
          );
   exit(EXIT_FAILURE);
 }
 
 int main(int argc, char* argv[]) {
   int ch;
-  uint16_t port = 8080;
+  uint16_t opt_port = 8080;
+  int opt_sleep = 0;
 
   while ((ch = getopt(argc, argv, "p:")) != -1) {
     switch (ch) {
@@ -49,9 +52,16 @@ int main(int argc, char* argv[]) {
             p > numeric_limits<uint16_t>::max()) {
           Usage();
         }
-        port = static_cast<uint16_t>(p);
+        opt_port = static_cast<uint16_t>(p);
       }
       break;
+    case 's':
+      opt_sleep = atoi(optarg);
+      if (opt_sleep < 0 || opt_sleep > 86400) {
+        fprintf(stderr, "-s seconds should be between 0 and 86,400 seconds.\n");
+        Usage();
+      }
+      break; 
     default:
       Usage();
       break;
@@ -73,7 +83,7 @@ int main(int argc, char* argv[]) {
   memset(&socket_address, 0, sizeof(socket_address));
   socket_address.sin6_family = AF_INET6;
   socket_address.sin6_addr = in6addr_any;
-  socket_address.sin6_port = htons(port);
+  socket_address.sin6_port = htons(opt_port);
 
   if (bind(s, reinterpret_cast<struct sockaddr*>(&socket_address),
            sizeof(socket_address)) == -1) {
@@ -98,6 +108,13 @@ int main(int argc, char* argv[]) {
       return EXIT_FAILURE;
     }
 
+    char address_string[INET6_ADDRSTRLEN];
+    if (inet_ntop(AF_INET6, &peer_address.sin6_addr,
+                  address_string, sizeof(address_string))) {
+      printf("Client address is %s\n", address_string);
+      printf("Client port is %d\n", ntohs(peer_address.sin6_port));
+    }
+
     char buf[4096];
     memset(buf, 0, sizeof(buf));
     size_t n = read(peer_sock, buf, sizeof(buf));
@@ -107,12 +124,17 @@ int main(int argc, char* argv[]) {
     }
     printf("Received message:\n[%s]\n", buf);
 
-    sleep(2); // Simulate computation.
+    if (opt_sleep > 0) {
+      sleep(opt_sleep); // Simulate computation.
+    }
 
-    write(peer_sock, "I got your note.\n", 16);
+    const char kResponse[] = "I got your note.\n";
+    write(peer_sock, kResponse, sizeof(kResponse));
     close(peer_sock);
 
-    if (strncmp("quit", buf, 4) == 0) {
+    const char kQuit[] = "quit";
+    if (strncmp(kQuit, buf, sizeof(kQuit)-1) == 0) {
+      printf("Quitting...\n");
       break;
     }
   }
