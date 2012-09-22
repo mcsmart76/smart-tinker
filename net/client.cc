@@ -12,7 +12,6 @@
 //
 //   make client
 
-// TODO: add __linux__ and __APPLE__ ifdefs
 // TODO: macros for logging error and perror
 // TODO: proper errno handling; helper function using strerror_r
 // and convert to a string
@@ -27,10 +26,15 @@
 #include <string.h>  // memcpy
 #include <sys/errno.h>
 #include <sys/mman.h>  // mmap, madvise
-#include <sys/socket.h>  // socket, sendfile
+#ifdef __linux__
+#include <sys/sendfile.h>  // sendfile
+#endif
+#include <sys/socket.h>  // socket, sendfile (OSX)
 #include <sys/stat.h>  // fstat
 #include <sys/types.h>
-#include <sys/uio.h>
+#ifdef __APPLE__
+#include <sys/uio.h>  // sendfile
+#endif
 #include <unistd.h>  // getopt
 
 #include <iostream>
@@ -207,7 +211,6 @@ int main(int argc, char* argv[]) {
       //
       // to be notified if another process attempts to truncate the
       // file while we're sending.
-  
       data = mmap(0, file_size, PROT_READ, MAP_PRIVATE | MAP_NORESERVE, fd, 0);
       if (data == MAP_FAILED) {
         fprintf(stderr, "%d: %s\n", __LINE__, strerror(errno));
@@ -247,16 +250,22 @@ int main(int argc, char* argv[]) {
     // OSX's implementation of sendfile(2) allows headers and trailers
     // as iovecs.  Linux, unfortunately, does not.  The standard workaround
     // is to use TCP_CORK.
-    // 
-    // The Linux header is the eponymous <sys/sendfile.h>.
+#ifdef __APPLE__
     off_t len = 0;
     if (sendfile(fd, peer_socket, 0, &len, NULL, 0) == -1) {
+#else
+#ifdef __linux__
+    ssize_t len = sendfile(peer_socket, fd, NULL, 0);
+    if (len == -1) {
+#endif
+#endif
       fprintf(stderr, "%d: %s\n", __LINE__, strerror(errno));
       return EXIT_FAILURE;
     }
+    int64_t bytes_sent = static_cast<int64_t>(len);
     if (len != file_size) {
-      fprintf(stderr, "%d: did not send complete file: %llu vs. %lu",
-              __LINE__, len, file_size);
+      fprintf(stderr, "%d: did not send complete file: %ld vs. %lu",
+              __LINE__, bytes_sent, file_size);
       return EXIT_FAILURE;
     }
   } else {
@@ -299,7 +308,7 @@ int main(int argc, char* argv[]) {
       break;
     }
   }
- 
+
   close(peer_socket);
 
   return EXIT_SUCCESS;
