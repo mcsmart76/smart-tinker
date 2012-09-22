@@ -28,6 +28,8 @@
 #include <limits>  // numeric_limits
 #include <string>
 
+#include "net_util.h"
+
 using std::numeric_limits;
 using std::string;
 
@@ -50,21 +52,6 @@ void Usage() {
           " -s\tSleep this many seconds to simulate work.\n"
          );
   exit(EXIT_FAILURE);
-}
-
-// Set a file descriptor to non-blocking.  Returns true if
-// successful.
-bool SetFdNonBlocking(int fd) {
-  int flags = fcntl(fd, F_GETFL);
-  if (flags == -1) {
-    perror("fcntl(F_GETFL) failed");
-    return false;
-  }
-  if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
-    perror("fcntl(F_SETFL, O_NONBLOCK) failed");
-    return false;
-  }
-  return true;
 }
 
 int main(int argc, char* argv[]) {
