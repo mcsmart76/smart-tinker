@@ -1,0 +1,29 @@
+Bit Biddleton has invented a test to determine whether the intepreter
+he is face with is using applicative-order evaluation or normal-order
+evaluation. He defines the following two procedures:
+
+(define (p) (p))
+
+(define (test x y)
+  (if (= 0 x)
+      0
+      y))
+
+Then he evaluates:
+
+(test 0 (p))
+
+
+In both cases the test operator is substituted with its formal parameters,
+yielding:
+
+(if (= 0 0) 0 (p))
+
+For applicative-order, the if's predicate evaluates to true, so the 
+consequent expression is evaluated and returned. It is a primitive, so
+this is simply 0.
+
+For normal-order, the if's alternative contains a non-primitive operator, so
+it is expanded before the predicate is evaluated. Since the expansion of p is
+compound expression containing itself, this continues in an infinite recursion,
+never returning.

@@ -1,0 +1,7 @@
+Describe the behavior of the following procedure:
+
+(define (a-plus-abs-b a b)
+  ((if (> 0 b) + -) a b))
+
+The operator expression is evaluated, resulting in the implicit operator + for "a+b"
+when b is positive and - for "a-(-b)" when b is 0 or negative.
