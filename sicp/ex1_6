@@ -1,0 +1,10 @@
+When evaluating a compound expression, the operator is evalauted
+by fetching the expansion, then evaluating each operand in order,
+and substituting in the results.
+
+The reason new-if doesn't work is because the third operand to
+new-if causes the sqrt-iter to be recursively expanded even when
+the first operand (new-if's predicate) returns true. E.g. when
+(good-enough? guess x) returns #t, the sqrt-iter procedure will
+still be evaluated, thus expanded, keeping the cond from
+being applied.

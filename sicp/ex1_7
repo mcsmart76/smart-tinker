@@ -1,0 +1,55 @@
+The fixed precision of good-enough? causes problems for very small
+numbers and very large numbers. Why?
+
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+For very small numbers, say << 0.001, the improved guess will approach
+the square root of 0.001 (approximately 0.03). At this point the
+results of |0.03^2 - (very small number)| ~= 0.001 and thus the
+good-enough? predicate will be true.
+
+Ex: (sqrt 0.000001) = 0.031...
+
+For very large numbers, we will lose precision and never have
+a difference in the square of guess and x that is smaller than the
+fixed point 0.001.
+
+Ex: (sqrt 1000000000000) does not return.
+
+
+To get around this, we can look at when the guess is no longer
+changing much, say by 0.1%.
+
+(define (good-enough? guess x)
+  (< (abs (- (improve guess x) guess))
+     (* guess 0.001)))
+
+> (sqrt 0.000001)
+> 0.0010005538710539446
+
+> (sqrt 1000000000000)
+> 1000454.9908041331
+
+
+## Square root
+
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x) x)))
+
+(define (good-enough? guess x)
+  (< (abs (- (improve guess x) guess))
+     (* guess 0.001)))
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (square x) (* x x))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
