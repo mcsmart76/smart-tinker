@@ -1,0 +1,9 @@
+(define (fast-mult a b)
+  (cond ((= b 0) 0)
+        ((even? b) (double (fast-mult a (/ b 2))))
+        (else (+ a (fast-mult a (- b 1))))))
+
+(define (double a)
+  (+ a a))
+
+(fast-mult 11 11)
