@@ -1,0 +1,24 @@
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+
+; Simpson's rule for integral. n is an even integer.
+; Sum up using k from 0 to n.
+(define (simpsons-integral f a b n)
+  (let* ((h (/ (- b a) n))
+         (yk (lambda (k)
+           (* (cond ((or (= k 0) (= k n)) 1)
+                    ((even? k) 2)
+                    (else 4))
+              (f (+ a (* h k)))))))
+    (* (/ h 3.0) (sum yk 0 (lambda (x) (+ x 1)) n))))
+
+(define (cube x) (* x x x))
+
+(simpsons-integral cube 0 1 100)
+; 0.24999999999999992
+
+(simpsons-integral cube 0 1 1000)
+; 0.2500000000000003
