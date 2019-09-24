@@ -11,26 +11,26 @@ actually performed.
 
 (gcd 206 40)
 
-' No remainder calls performed.
+; No remainder calls performed.
 (gcd 40 (remainder 206 40))
 
-' 1 remainder call performed in if. 6 != 0
+; 1 remainder call performed in if. 6 != 0
 (gcd (remainder 206 40)
      (remainder 40 (remainder 206 40)))
 
-' 2 remainder calls performed in if. 4 != 0
+; 2 remainder calls performed in if. 4 != 0
 (gcd (remainder 40 (remainder 206 40))
      (remainder (remainder 206 40)
                 (remainder 40 (remainder 206 40))))
 
-' 4 remainder calls performed in if. 2 != 0
+; 4 remainder calls performed in if. 2 != 0
 (gcd (remainder (remainder 206 40)
                 (remainder 40 (remainder 206 40)))
      (reaminder (remainder 40 (remainder 206 40))
                 (remainder (remainder 206 40)
 			   (remainder 40 (remainder 206 40)))))
 
-' 7 remainder calls performed in if.
-' 4 remainder calls performed in evaluating a.
+; 7 remainder calls performed in if.
+; 4 remainder calls performed in evaluating a.
 
 There were a total of 18 calls to remainder.
