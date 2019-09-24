@@ -1,0 +1,37 @@
+Use the Miller-Rabin test for primality.
+
+
+(define (square n) (* n n))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (mod (square (expmod base (/ exp 2) m)) m))
+        (else (mod (* base (expmod base (- exp 1) m)) m))))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (let ((x (expmod base (/ exp 2) m)))
+           (if (non-trivial-sqrt? x m)
+               0
+               (mod (square x) m)))) 
+        (else (mod (* base (expmod base (- exp 1) m)) m))))
+
+(define (non-trivial-sqrt? n m)
+  (cond ((= n 1) #f)
+        ((= n (- m 1)) #f)
+        (else (= (mod (square n) m) 1))))
+
+(define (miller-rabin-test n a)
+  (= (expmod a (- n 1) n) 1))
+
+(define (random-miller-rabin-test n)
+  (miller-rabin-test n 
+                     (+ 1 (random-integer (- n 1)))))
+
+(define (fast-prime? n count) 
+  (cond ((= count 0) #t) 
+        ((random-miller-rabin-test n)
+         (fast-prime? n (- count 1)))
+        (else #f))) 

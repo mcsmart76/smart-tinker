@@ -1,0 +1,35 @@
+Demonstrate that the Carmichael numbers really do fool the
+Fermat test. Write a procedure that takes an integer n and tests
+whether a^n is congruent to a modulo n for every a < n.
+
+
+(define (square n) (* n n))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (mod (square (expmod base (/ exp 2) m)) m))
+        (else (mod (* base (expmod base (- exp 1) m)) m))))
+
+(define (fermat-test n a)
+  (= (expmod a n n) a))
+
+(define (fool n)
+  (define (fool-iter a)
+    (cond ((= a n) 'fooled)
+          ((fermat-test n a)
+           (fermat-test n (+ a 1)))
+          (else #f)))
+  (newline)
+  (display n)
+  (cond ((fool-iter 2)
+         (display " ... fooled!"))
+        (else
+         (display " ... not Carmichael"))))
+
+(fool 561)
+(fool 1105)
+(fool 1729)
+(fool 2465)
+(fool 2821)
+(fool 6601)

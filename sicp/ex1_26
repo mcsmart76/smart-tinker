@@ -1,0 +1,5 @@
+By using explicit multiplication in expmod the code
+is calling expmod recursively twice for every call to
+itself. Thus the halving of work every time by
+dividing the exponent in half is being undone, bring
+us back to Θ(n).

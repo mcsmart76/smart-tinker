@@ -1,0 +1,8 @@
+If we wrote expmod as:
+
+(define (expmod base exp m)
+  (mod (fast-expt base exp) m))
+
+then we would have issues with overflow and precision of large
+exponents since the remainder is only taken once the entire
+base^exp is calculated.
