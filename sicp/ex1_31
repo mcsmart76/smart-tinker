@@ -1,0 +1,40 @@
+## Recursive product 
+
+(define (product-recur term a next b)
+  (if (> a b)
+      1
+      (* (term a)
+         (product-recur term (next a) next b))))
+
+## Iterative product
+
+(define (product term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (* result (term a)))))
+  (iter a 1))
+
+## Factorial
+
+(define (factorial n)
+  (product (lambda (x) x)
+           1
+           (lambda (x) (+ x 1))
+           n))
+
+(factorial 10)
+; 3628800 
+
+## Pi
+
+(define (pi n)
+  (* 4 (product (lambda (x)
+                  (/ (+ x (if (even? x) 2 1))
+                     (+ x (if (even? x) 1 2))))
+                1
+                (lambda (x) (+ x 1))
+                n)))
+
+(pi 10000)
+; 3.14174970573800840

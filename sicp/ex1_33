@@ -1,0 +1,59 @@
+## Filtered accumulate
+
+(define (filtered-accumulate combiner null-value term a next b filter)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a)
+              (if (filter a)
+                  (combiner result (term a))
+                  result))))
+  (iter a null-value))
+
+## Sum of primes squared
+
+(define (square n) (* n n))
+
+(define (find-divisor n test-divisor)
+  (define (divides? a b) (= (mod b a) 0))
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
+
+(define (prime? n)
+  (define (smallest-divisor n)
+    (find-divisor n 2))
+  (if (< n 2)
+      #f
+      (= n (smallest-divisor n))))
+
+(define (sum-of-primes-squared a b)
+  (filtered-accumulate +
+                       0
+                       square
+                       a
+                       (lambda (x) (+ x 1))  ; inc
+                       b
+                       prime?))
+
+(sum-of-primes-squared 1 10)
+; 87
+
+## Product of relative primes
+
+(define (gcd n m)
+  (if (= m 0)
+      n
+      (gcd m (mod n m))))
+
+(define (product-of-relative-primes n)
+  (filtered-accumulate *
+                       1
+                       (lambda (x) x)  ; identity
+                       1
+                       (lambda (x) (+ x 1))  ; inc
+                       (- n 1)
+                       (lambda (i) (= 1 (gcd n i)))))  ; relatively prime
+
+(product-of-relative-primes 10)
+; 189
