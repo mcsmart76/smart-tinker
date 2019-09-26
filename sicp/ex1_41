@@ -1,0 +1,33 @@
+(define (double f)
+  (lambda (x) (f (f x))))
+
+(define inc (lambda (x) (+ x 1)))
+
+(double 5)
+; 7
+
+
+(((double (double double)) inc) 5)
+(((double (lambda (x) (double (double x)))) inc) 5)
+(((lambda (x)
+   ((lambda (x) (double (double x)))
+    (lambda (x) (double (double x)))))
+ inc) 5)
+(((lambda (x) (double (double (double (double x))))) inc) 5)
+(((lambda (x) (double (double (double (inc
+                                      (inc x))))))
+ inc) 5)
+(((lambda (x) (double (double (inc (inc
+                              (inc (inc x)))))))
+ inc) 5)
+(((lambda (x) (double (inc (inc (inc (inc
+                      (inc (inc (inc (inc x))))))))))
+ inc) 5)
+((lambda (x) (inc (inc (inc (inc (inc (inc (inc (inc
+             (inc (inc (inc (inc (inc (inc (inc (inc x)))))))))))))))))
+ 5)
+(inc (inc (inc (inc
+ (inc (inc (inc (inc
+ (inc (inc (inc (inc
+ (inc (inc (inc (inc 5))))))))))))))))
+; 21

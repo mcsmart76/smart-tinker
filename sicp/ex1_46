@@ -1,0 +1,37 @@
+## Iterative improve
+
+(define (iterative-improve good-enough? improve)
+  (define (try guess)
+    (let ((next (improve guess)))
+      (if (good-enough? guess next)
+          next
+          (try next))))
+  try)
+
+## Square root from ex1.7
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (sqrt x)
+  (define (sqrt-improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt-good-enough? guess x)
+    (< (abs (- (sqrt-improve guess) guess))
+       (* guess 0.001)))
+  ((iterative-improve sqrt-good-enough? sqrt-improve) 1.0))
+
+(sqrt 2)
+; 1.4142135623746899
+
+## Fixed point from ex1.36
+
+(define (fixed-point f first-guess)
+  (let ((tolerance 0.00001))
+    ((iterative-improve (lambda (x y) (< (abs (- x y))
+                                          tolerance))
+                        (lambda (x) (f x)))
+     first-guess)))
+
+(fixed-point (lambda (x) (/ (+ x (/ (log 1000) (log x))) 2)) 2.0)
+; 4.555537551999825
