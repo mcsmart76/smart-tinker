@@ -1,0 +1,31 @@
+(define (fast-expt base expt)
+  (define (iter b n a)
+    (cond ((= n 0) a)
+          ((even? n) (iter (* b b) (/ n 2) a))
+          (else (iter b (- n 1) (* b a)))))
+  (iter base expt 1))
+
+; Returns the number of times |base| divides into |n|.
+(define (divides-into base n)
+  (define (iter n a)
+    (if (= 0 (mod n base))
+        (iter (/ n base) (+ a 1))
+        a))
+  (iter n 0))
+
+(define (cons a b)
+  (* (fast-expt 2 a)
+     (fast-expt 3 b)))
+
+(define (car p)
+  (divides-into 2 p))
+
+(define (cdr p)
+  (divides-into 3 p))
+
+## Examples
+
+(define p (cons 3 7))
+p        ; 17496
+(car p)  ; 3
+(cdr p)  ; 7

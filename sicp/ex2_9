@@ -1,0 +1,72 @@
+(define (add-interval x y)
+  (make-interval (+ (lower-bound x) (lower-bound y))
+                 (+ (upper-bound x) (upper-bound y))))
+
+(define (sub-interval x y)
+  (make-interval (- (lower-bound x) (upper-bound y))
+                 (- (upper-bound x) (lower-bound y))))
+
+(define (width i)
+  (/ (- (upper-bound i) (lower-bound i)) 2))
+
+
+## Addition
+
+Doing a psuedo-expansion of addition:
+
+(width (add-interval x y))
+(/ (- (upper-bound (add-interval x y))
+      (lower-bound (add-interval x y)))
+   2)
+
+We can ignore the division by 2 since it's a constant factor.
+
+(- (upper-bound (add-interval x y))
+   (lower-bound (add-interval x y)))
+(- (+ (upper-bound x) (upper-bound y))
+   (+ (lower-bound x) (lower-bound y)))
+
+Rearranging, we get:
+
+(+ (- (upper-bound x) (lower-bound x))
+   (- (upper-bound y) (lower-bound y)))
+
+(+ (width x)
+   (width y))
+
+
+## Subtraction
+
+(width (sub-interval x y))
+(/ (- (upper-bound (sub-interval x y))
+      (lower-bound (sub-interval x y)))
+   2)
+
+We can ignore the division by 2 since it's a constant factor.
+
+(- (upper-bound (sub-interval x y))
+   (lower-bound (sub-interval x y)))
+(- (- (lower-bound x) (upper-bound y))
+   (- (upper-bound x) (lower-bound y)))
+
+Switching to algebraic notation:
+
+= (lo_x - up_y) - (up_x - lo_y)
+= -up_x + lo_x - up_y + lo_y
+= -(up_x - lo_x) - (up_y - lo_y)
+= -(width x) - (width y)
+
+
+## Multiplication
+
+One case where both number are positive in the interval
+and we are multiplying by the same interval is:
+
+(width (mul-interval x y))
+(/ (- (* (upper-bound x) (upper-bound y))
+      (* (lower-bound y) (lower-bound y)))
+   2)
+
+= up_x * up_y - lo_x * lo_y
+
+which is not related to (width x) or (width y).

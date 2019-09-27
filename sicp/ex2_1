@@ -1,0 +1,33 @@
+The function in the text does what we want because the
+GCD returns a negative number if the second argument is
+negative. This flips the sign of the numerator and
+denominator appropriately in all cases.
+
+(define (make-rat n d)
+  (let ((g (gcd n d)))
+    (cons (/ n g) (/ d g))))
+
+(define numer car)
+(define denom cdr)
+
+(define (gcd a b)
+  (if (= b 0) a (gcd b (mod a b))))
+
+(define (print-rat x)
+  (newline)
+  (display (numer x))
+  (display "/")
+  (display (denom x)))
+
+(print-rat (make-rat 1 2))
+; 1/2
+(print-rat (make-rat 6 8))
+; 3/4
+(print-rat (make-rat -1 3))
+; -1/3
+(print-rat (make-rat 1 -5))
+; -1/5
+(print-rat (make-rat -2 -14))
+; 1/7
+(print-rat (make-rat -0 3))
+; 0/1

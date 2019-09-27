@@ -1,0 +1,39 @@
+## Point representation
+
+; Points are pairs of numbers for the x and y coordinates.
+(define make-point cons)
+(define x-point car)
+(define y-point cdr)
+
+(define (print-point p)
+  (newline)
+  (display "(")
+  (display (x-point p))
+  (display ",")
+  (display (y-point p))
+  (display ")"))
+
+## Segment representation
+
+; Segments are pairs of start and end points.
+(define make-segment cons)
+(define start-segment car)
+(define end-segment cdr)
+
+(define (midpoint-segment s)
+  (define (average x y)
+    (/ (+ x y) 2))
+  (make-point (average (x-point (start-segment s))
+                       (x-point (end-segment s)))
+              (average (y-point (start-segment s))
+                       (y-point (end-segment s)))))
+
+## Examples
+
+(define seg (make-segment (make-point -2 4)
+                          (make-point 2 -8)))
+
+
+(print-point (start-segment seg))     ; (-2,4)
+(print-point (midpoint-segment seg))  ; (1,-2)
+(print-point (end-segment seg))       ; (4,-8)

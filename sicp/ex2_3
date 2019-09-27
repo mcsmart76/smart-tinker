@@ -1,0 +1,47 @@
+## Point representation
+
+; Points are pairs of numbers for the x and y coordinates.
+(define make-point cons)
+(define x-point car)
+(define y-point cdr)
+
+## Rectangle representation (first)
+
+; Rectangles are pairs of numbers for height and width.
+; (We conviently ignore the origin.)
+(define make-rectangle cons)
+(define height-rectangle car)
+(define width-rectangle cdr)
+
+(define (area-rectangle r)
+  (* (height-rectangle r) (width-rectangle r)))
+
+(define (perimeter-rectangle r)
+  (* 2 (+ (height-rectangle r) (width-rectangle r))))
+
+### Examples
+
+(define rect (make-rectangle 4 6))
+(area-rectangle rect)       ; 24
+(perimeter-rectangle rect)  ; 20
+
+## Rectangle representation (second)
+
+; Rectangles are pairs of points for opposite corners.
+(define make-rectangle cons)
+(define origin-rectangle car)
+(define opposite-rectangle cdr)
+
+(define (height-rectangle r)
+  (abs (- (y-point (origin-rectangle r))
+          (y-point (opposite-rectangle r)))))
+
+(define (width-rectangle r)
+  (abs (- (x-point (origin-rectangle r))
+          (x-point (opposite-rectangle r)))))
+
+### Examples
+
+(define rect (make-rectangle (make-point -1 1) (make-point 5 5)))
+(area-rectangle rect)       ; 24
+(perimeter-rectangle rect)  ; 20

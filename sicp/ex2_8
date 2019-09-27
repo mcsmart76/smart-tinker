@@ -1,0 +1,8 @@
+The maximum value the difference could be is the difference of the
+first interval's upper bound with the lower bound of the second interval,
+and the minimum value the difference could be first interval's lower
+bound with the upper bound of the second interval.
+
+(define (sub-interval x y)
+  (make-interval (- (lower-bound x) (upper-bound y))
+                 (- (upper-bound x) (lower-bound y))))

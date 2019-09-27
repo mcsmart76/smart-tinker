@@ -1,0 +1,22 @@
+## Church numerals
+
+(define zero (lambda (f) (lambda (x) x)))
+
+(define (add-1 n)
+  (lambda (f) (lambda (x) (f ((n f) x)))))
+
+; Looking at substitution, with a bit of visual help using
+; alignment and whitespace.
+(add-1 zero)
+(lambda (f) (lambda (x) (f (  (zero f)                         x))))
+(lambda (f) (lambda (x) (f (  ((lambda (f) (lambda (x) x))  f) x))))
+(lambda (f) (lambda (x) (f (               (lambda (x) x)      x))))
+(lambda (f) (lambda (x) (f                                     x )))
+
+(define one (lambda (f) (lambda (x) (f x))))
+
+(define two (lambda (f) (lambda (x) (f (f x)))))
+
+The numerals are the number of times f is applied to x. Addition follows
+as the repeated composition of f the necessary number of times, e.g.
+with our repeated and compose functions from Exercise 1.43.

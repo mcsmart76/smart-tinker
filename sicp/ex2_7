@@ -1,0 +1,5 @@
+We use the trival mapping for the interval representation.
+
+(define make-interval cons)
+(define lower-bound car)
+(define upper-bound cdr)
