@@ -1,0 +1,20 @@
+Let x be the center of an interval and tx be its percentage tolerance,
+and likewise y be the center of an interval and ty be its tolerance.
+
+Ix = [x*(1 - 0.5tx), x*(1 + 0.5tx)]
+Iy = [y*(1 - 0.5ty), y*(1 + 0.5ty)]
+
+Assuming only positive values, the interval Ix * Iy is:
+
+Ixy = [x*(1 - 0.5tx) * y*(1 - 0.5ty),
+       x*(1 + 0.5tx) * y*(1 + 0.5ty)]
+
+    = [xy*(1 - 0.5(tx + ty) + 0.25*tx*ty),
+       xy*(1 + 0.5(tx + ty) + 0.25*tx*ty)]
+      
+Assuming small percentage tolerances, the value 0.25*tx*ty will be
+very small and can be discarded.
+
+Ixy = [xy*(1 - 0.5(tx + ty),  xy*(1 + 0.5(tx + ty)]
+
+Thus the tolerance can be approximated as the sum of the tolerances.

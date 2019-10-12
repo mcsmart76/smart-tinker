@@ -1,0 +1,67 @@
+par2 is a better program than par1 because it gives a
+tighter bound on the resulting interval. We can expand
+the equations alebraically to confirm.
+
+I use the center and width representation, but it works
+also for lower and upper bounds.
+
+
+We will use the assumptions from Excercise 2.13 that
+the interval is small and all values are positive.
+
+par1 = (div (mul r1 r2)
+            (add r1 r2))
+
+     = (div [c1*c2 - 0.5(w1 + w2) + 0.25*w1*w2,
+             c1*c2 + 0.5(w1 + w2) + 0.25*w1*w2]
+            [c1 + c2 - 0.5(w1 + w2),
+             c1 + c2 + 0.5(w1 + w2)])
+
+The 0.25w1*w2 is neglible given our assumptions, so simplified
+to 0. Also let ω = 0.5(w1 + w2).
+
+     = (div [c1*c2   - ω, c1*c2   + ω]
+            [c1 + c2 - ω, c1 + c2 + ω])
+
+     = (mul [c1*c2      - ω , c1*c2  + ω ]
+            [1/(c1 + c2 + ω), 1/(c1 + c2 - ω)])
+
+     = [(c1*c2 - ω) / (c1 + c2 + ω),
+        (c1*c2 + ω) / (c1 + c2 - ω)]
+
+
+par2 = (div one
+           (add (div one r1)
+                (div one r2)))
+
+     = (div one
+           (add (mul one [1/(c1 + 0.5*w1), 1/(c1 - 0.5*w1)])
+                (mul one [1/(c2 + 0.5*w2), 1/(c2 - 0.5*w2)])))
+
+     = (div one
+           (add [1/(c1 + 0.5*w1), 1/(c1 - 0.5*w1)]
+                [1/(c2 + 0.5*w2), 1/(c2 - 0.5*w2)]))
+
+     = (div one [1/(c1 + 0.5*w1) + 1/(c2 + 0.5*w2),
+                 1/(c1 - 0.5*w1) + 1/(c2 - 0.5*w2)])
+
+     = (div one [(c1 + c2 + 0.5(w1 + w2)) / (c1 + 0.5*w1)(c2 + 0.5*w2),
+                 (c1 + c2 - 0.5(w1 + w2)) / (c1 - 0.5*w1)(c2 - 0.5*w2)])
+
+     = (div one [(c1 + c2 + 0.5(w1 + w2)) / (c1*c2 + 0.5(w1 + w2) + 0.25*w1*w2),
+                 (c1 + c2 - 0.5(w1 + w2)) / (c1*c2 - 0.5(w1 + w2) + 0.25*w1*w2)]
+
+Using the same assumptions and substitutions as above:
+
+     = (div one [(c1 + c2 + ω) / (c1*c2 + ω),
+                 (c1 + c2 - ω) / (c1*c2 - ω)])
+
+     = (mul one [(c1*c2 - ω) / (c1 + c2 - ω),
+                 (c1*c2 + ω) / (c1 + c2 + ω)])
+
+     = [(c1*c2 - ω) / (c1 + c2 - ω),
+        (c1*c2 + ω) / (c1 + c2 + ω)]
+
+
+The numerators for both par1 and par2 intervals are the same, but the denominator
+is larger for par1 than par2, thus the overall interval will be wider for par1.

@@ -1,0 +1,16 @@
+; Returns the list |items| as a reversed list.
+(define (reverse items)
+  (define (reverse-iter from to)
+    (if (null? from)
+        to
+        (reverse-iter (cdr from) (cons (car from) to))))
+  (reverse-iter items '()))
+
+(reverse (list 1 4 9 16 25))
+; (25 16 9 4 1)
+(reverse (list 1 2 3 4))
+; (4 3 2 1)
+(reverse (reverse (list 1 2 3 4)))
+; (1 2 3 4)
+(reverse '())
+; ()

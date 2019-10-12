@@ -1,0 +1,30 @@
+(define make-interval cons)
+(define lower-bound car)
+(define upper-bound cdr)
+
+(define (make-center-width c w)
+  (make-interval (- c w) (+ c w)))
+
+(define (center i)
+  (/ (+ (lower-bound i) (upper-bound i)) 2))
+
+(define (width i)
+  (/ (- (upper-bound i) (lower-bound i)) 2))
+
+(define (make-center-percent c p)
+  (make-center-width c (* c p)))
+
+(define (percent i)
+  (/ (width i) (center i)))
+
+(define i1 (make-center-percent 10 0.05))
+i1            ; (9.5 . 10.5)
+(center i1)   : 10
+(width i1)    ; 0.5
+(percent i1)  ; 0.05
+
+(define i2 (make-center-width 10 0.75))
+i2            ; (9.25 . 10.75)
+(center i2)   : 10
+(width i2)    ; 0.75
+(percent i2)  ; 0.075

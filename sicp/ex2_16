@@ -1,0 +1,5 @@
+Algebraic equations that should result in the same values
+will not because computers have limited precision for
+storing and calculating values. An interval arithmetic
+package that avoids this might be possible, but likely
+only if we treated equations symbolically.
