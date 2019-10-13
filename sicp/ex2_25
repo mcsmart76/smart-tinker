@@ -1,0 +1,35 @@
+## (1 3 (5 7) 9)
+
+(car (cdr (cdr '(1 3 (5 7) 9))))
+; (5 7)
+(car (cdr (car (cdr (cdr '(1 3 (5 7) 9))))))
+; 7
+
+## ((7))
+
+This is a list with a list as the first element, so 2 cars.
+
+(car (car '((7))))
+; 7
+
+## (1 (2 (3 (4 (5 (6 7))))))
+
+This is a list with the second element itself being a list,
+repeatedly. The car of the cdr (cadr) at each level gives the
+first element of the sublists, which we need to repeat for each
+of the 6 sublists after the root
+
+(car (cdr
+  (car (cdr
+    (car (cdr
+      (car (cdr
+        (car (cdr
+          (car (cdr
+            '(1 (2 (3 (4 (5 (6 7))))))
+          ))
+        ))
+      ))
+    ))
+  ))
+))
+; 7

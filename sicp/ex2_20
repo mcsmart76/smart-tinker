@@ -1,0 +1,18 @@
+; Take a list of integers and return a list of all arguments
+; that have the same parity as the first argument.
+(define (same-parity . i)
+  (define (recurse p int-list)
+    (cond ((null? int-list) '())
+          ((= (mod p 2) (mod (car int-list) 2))
+           (cons (car int-list) (recurse p (cdr int-list))))
+          (else (recurse p (cdr int-list)))))
+  (if (null? i)
+      '()
+      (cons (car i) (recurse (car i) (cdr i)))))
+
+(same-parity 1 2 3 4 5 6 7)
+; (1 3 5 7)
+(same-parity 2 3 4 5 6 7)
+; (2 4 6)
+(same-parity)
+; ()

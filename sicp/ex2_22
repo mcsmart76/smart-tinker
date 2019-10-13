@@ -1,0 +1,18 @@
+(define (square-list items)
+  (define (square x) (* x x))
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons (square (car things))
+              answer))))
+  (iter items '()))
+
+This produces the list in reverse order because |answer|
+is the second argument to cons, thus as we car off items
+the result is pushed on the front of the list each time.
+
+Swapping the arguments of cons doesn't work, however,
+because it starts by consing nil with a number, resulting
+in a pair and not a list. We had a similar issue with
+defining reverse in a recursive manner in Exercise 2.18.
