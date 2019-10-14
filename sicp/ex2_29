@@ -1,0 +1,60 @@
+(define (make-mobile left right)
+  (list left right))
+
+(define (make-branch length structure)
+  (list length structure))
+
+## a
+
+(define (left-branch m) (car m))
+(define (right-branch m) (cadr m))
+(define (branch-length b) (car b))
+(define (branch-structure b) (cadr b))
+
+## b
+
+(define (total-weight m)
+  (define (branch-weight b)
+    (cond ((null? b) 0)
+          ((not (pair? (branch-structure b)))
+           (branch-structure b))  ; weight
+          (else (total-weight (branch-structure b)))))
+  (cond ((null? m) 0)
+        ((not (pair? m)) m)
+        (else (+ (branch-weight (left-branch m))
+                 (branch-weight (right-branch m))))))
+
+(define m
+  (make-mobile (make-branch 10
+                            (make-mobile (make-branch 4 3)
+                                         (make-branch 6 2)))
+               (make-branch 5 10)))
+
+(total-weight m)
+; 15
+
+## c
+
+(define (balanced? m)
+  (define (balanced-branch? b)
+    (cond ((null? b) #t)
+          ((not (pair? (branch-structure b))) #t)
+          (else (balanced? (branch-structure b)))))
+  (define (torque b)
+    (* (branch-length b)
+       (total-weight (branch-structure b))))
+  (if (null? m)
+      #t
+      (and (balanced-branch? (left-branch m))
+           (balanced-branch? (right-branch m))
+           (= (torque (left-branch m))
+              (torque (right-branch m))))))
+
+(balanced? m)
+; #t
+
+## d
+
+If we change make-mobile and make-branch to use cons instead
+of list, we need to change just the accessors for right-branch
+and branch-structure. Specifically, s/cadr/cdr/.

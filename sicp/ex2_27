@@ -1,0 +1,33 @@
+; Returns the list |items| as a reversed list.
+(define (reverse items)
+  (define (reverse-iter from to)
+    (if (null? from)
+        to
+        (reverse-iter (cdr from) (cons (car from) to))))
+  (reverse-iter items '()))
+
+; Returns the list |items| and any lists within
+; those items as reversed lists.
+(define (deep-reverse items)
+  (define (reverse-iter from to)
+    (cond ((null? from) to)
+          ((pair? (car from))
+           (reverse-iter (cdr from)
+                         (cons (reverse-iter (car from) '()) to)))
+          (else
+            (reverse-iter (cdr from)
+                          (cons (car from) to)))))
+  (reverse-iter items '()))
+
+(define x (list (list 1 2) (list 3 4)))
+
+(reverse x)
+; ((3 4) (1 2))
+
+(deep-reverse x)
+; ((4 3) (2 1))
+
+
+The key is to check if the car is a pair, and if so we have a potential
+sublist to cons after running the reverse-iter again, starting with
+a new empty list as the accumulator.

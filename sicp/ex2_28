@@ -1,0 +1,16 @@
+; Takes a |tree| as a list and returns the leaves
+; as a list in order they appear in the tree.
+(define (fringe tree)
+  (cond ((null? tree) '())
+        ((not (pair? tree)) (list tree))
+        (else
+          (append (fringe (car tree))
+                  (fringe (cdr tree))))))
+
+(define x (list (list 1 2) (list 3 4)))
+
+(fringe x)
+; (1 2 3 4)
+
+(fringe (list x x))
+; (1 2 3 4 1 2 3 4)
