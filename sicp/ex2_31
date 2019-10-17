@@ -1,0 +1,37 @@
+(define (square x) (* x x))
+
+## tree-map-direct defined directly
+
+(define (tree-map-direct proc tree)
+  (cond ((null? tree) '())
+        ((not (pair? tree)) (proc tree))
+        (else
+          (cons (tree-map-direct proc (car tree))
+                (tree-map-direct proc (cdr tree))))))
+
+(define (square-tree-direct tree)
+  (tree-map-direct square tree))
+
+(square-tree-direct
+  (list 1
+    (list 2 (list 3 4) 5)
+    (list 6 7)))
+; (1 (4 (9 16) 25) (36 49))
+
+## tree-map defined with map
+
+(define (tree-map proc tree)
+  (map (lambda (t)
+         (if (pair? t)
+             (tree-map proc t)
+             (proc t)))
+       tree))
+
+(define (square-tree tree)
+  (tree-map square tree))
+
+(square-tree-map
+  (list 1
+    (list 2 (list 3 4) 5)
+    (list 6 7)))
+; (1 (4 (9 16) 25) (36 49))

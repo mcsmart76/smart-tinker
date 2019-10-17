@@ -1,0 +1,24 @@
+(define (subsets s)
+  (if (null? s)
+      (list '())
+      (let ((rest (subsets (cdr s))))
+        (append rest
+                (map (lambda (x) (cons (car s) x))
+                     rest)))))
+
+(subsets '())
+; (())
+(subsets '(1))
+; (() (1))
+(subsets '(1 2))
+; (() (2) (1) (1 2))
+(subsets '(1 2 3))
+; (() (3) (2) (2 3) (1) (1 3) (1 2) (1 2 3))
+
+# Explanation
+
+The procedure constructs the subsets by first creating the subsets
+without the first element, i.e. rest is the subset constructed from
+the cdr of s. Second, we create subsets from all of those with the
+addition of the first element. This is done simply by cons'ing
+the car of s.
