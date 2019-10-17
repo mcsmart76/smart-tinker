@@ -14,3 +14,5 @@
 
 (fringe (list x x))
 ; (1 2 3 4 1 2 3 4)
+
+Note that this is the same as enumerate-tree from Section 2.2.3.
